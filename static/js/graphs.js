@@ -42,7 +42,7 @@ function makeGraphs2(error, projectsJson, statesJson) {
 	var povertyLevelDim = ndx.dimension(function(d) { return d["sector"]; });
 	var stateDim = ndx.dimension(function(d) { return d["cellid"]; });
 	var totalDonationsDim  = ndx.dimension(function(d) {
-        console.log(d["sensor"]);
+        //console.log(d["sensor"]);
         return d["sensor"]; });
 
 
@@ -67,7 +67,7 @@ function makeGraphs2(error, projectsJson, statesJson) {
 	var maxDate = dateDim.top(1)[0]["date"];
 
     //Charts
-	var timeChart = dc.barChart("#time-chart");
+	//var timeChart = dc.barChart("#time-chart");
 	var resourceTypeChart = dc.rowChart("#resource-type-row-chart");
 	var povertyLevelChart = dc.rowChart("#poverty-level-row-chart");
 	var usChart = dc.geoChoroplethChart("#us-chart");
@@ -85,17 +85,17 @@ function makeGraphs2(error, projectsJson, statesJson) {
 		.group(totalDonations)
 		.formatNumber(d3.format(".4"));
 
-	timeChart
-		.width(600)
-		.height(160)
-		.margins({top: 10, right: 50, bottom: 30, left: 50})
-		.dimension(dateDim)
-		.group(numProjectsByDate)
-		.transitionDuration(500)
-		.x(d3.time.scale().domain([minDate, maxDate]))
-		.elasticY(true)
-		.xAxisLabel("Time")
-		.yAxis().ticks(4);
+//	timeChart
+//		.width(600)
+//		.height(160)
+//		.margins({top: 10, right: 50, bottom: 30, left: 50})
+//		.dimension(dateDim)
+//		.group(numProjectsByDate)
+//		.transitionDuration(500)
+//		.x(d3.time.scale().domain([minDate, maxDate]))
+//		.elasticY(true)
+//		.xAxisLabel("Time")
+//		.yAxis().ticks(4);
 
 	resourceTypeChart
         .width(300)
@@ -139,8 +139,8 @@ function makeGraphs2(error, projectsJson, statesJson) {
 d3.json("static/heatmap.json", function(error, heatmap) {
   if (error) throw error;
 
-    var width = 960,
-    height = 500;
+    var width = 600,
+    height = 160;
 
   var dx = heatmap[0].length,
       dy = heatmap.length;
@@ -169,16 +169,22 @@ d3.json("static/heatmap.json", function(error, heatmap) {
 
   var yAxis = d3.svg.axis()
       .scale(y)
-      .orient("right");
+      .orient("right")
+      .ticks(5);
 
-  d3.select("body").append("canvas")
+  d3.select("#time-chart")
+      .style("width", width + "px")
+      .style("height", height + "px")
+//      .append("time-chart-body")
+      .append("canvas1")
+      .append("canvas")
       .attr("width", dx)
       .attr("height", dy)
       .style("width", width + "px")
       .style("height", height + "px")
       .call(drawImage);
 
-  var svg = d3.select("body").append("svg")
+  var svg = d3.select("#time-chart").append("svg1").append("svg")
       .attr("width", width)
       .attr("height", height);
 
@@ -197,7 +203,7 @@ d3.json("static/heatmap.json", function(error, heatmap) {
   function drawImage(canvas) {
     var context = canvas.node().getContext("2d"),
         image = context.createImageData(dx, dy);
-      ctx2 = canvas.getElementById("as");
+      
     for (var y = 0, p = -1; y < dy; ++y) {
       for (var x = 0; x < dx; ++x) {
         var c = d3.rgb(color(heatmap[y][x]));

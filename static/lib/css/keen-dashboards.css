@@ -65,3 +65,32 @@ body.application hr {
   font-size: 12px;
   padding: 8px 10px 5px;
 }
+
+
+/*
+ para o grafico de calor
+*/
+
+#time-chart-body {
+  position: relative;
+}
+
+.axis text {
+  font: 10px sans-serif;
+}
+
+svg1,
+canvas1 {
+  position: absolute;
+}
+
+.axis path, .axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.axis path {
+  display: none;
+}
+
